@@ -13,14 +13,15 @@ const exitCommand = "exit\r"
 
 // Server type holds all the os/exec objects for the terraria server
 type Server struct {
-	Command   *exec.Cmd
-	Stdin     io.WriteCloser
-	quit      chan struct{}
-	lastWrite time.Time
+	Command      *exec.Cmd
+	Stdin        io.WriteCloser
+	AutosaveTime time.Duration
+	quit         chan struct{}
+	lastWrite    time.Time
 }
 
 // NewServer launches a new Terraria server with a given command
-func NewServer(command []string) (*Server, error) {
+func NewServer(command []string, autosaveTime time.Duration) (*Server, error) {
 	cmd := exec.Command(command[0], command[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -33,10 +34,11 @@ func NewServer(command []string) (*Server, error) {
 	quit := make(chan struct{})
 
 	return &Server{
-		Command:   cmd,
-		Stdin:     stdin,
-		quit:      quit,
-		lastWrite: time.Now(),
+		Command:      cmd,
+		Stdin:        stdin,
+		AutosaveTime: autosaveTime,
+		quit:         quit,
+		lastWrite:    time.Now(),
 	}, nil
 }
 

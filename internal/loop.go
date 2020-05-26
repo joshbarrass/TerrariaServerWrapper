@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-const autosaveTime = 10 * time.Minute
-
 const autosaveCommand = "save\r"
 
 // startInputLoop begins a goroutine that continuously forwards
@@ -49,7 +47,7 @@ func (server *Server) startAutosaveLoop(ctx context.Context) {
 				fmt.Println("Exiting autosave loop")
 				return
 			case <-autosave:
-				if time.Since(server.lastWrite) < autosaveTime {
+				if time.Since(server.lastWrite) < server.AutosaveTime {
 					continue
 				}
 				fmt.Println("Autosaving...")
@@ -63,7 +61,7 @@ func (server *Server) startAutosaveLoop(ctx context.Context) {
 			case <-ctx.Done():
 				return
 			default:
-				time.Sleep(autosaveTime)
+				time.Sleep(server.AutosaveTime)
 				autosave <- struct{}{}
 			}
 		}

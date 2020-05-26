@@ -24,4 +24,4 @@ All configuration is done via environment variables.
 | Env Variable                 | Default                   | Description                                                                                                              |
 |:----------------------------:|:-------------------------:|--------------------------------------------------------------------------------------------------------------------------|
 | AUTOSAVE\_TIME               | 5m                        | How often to autosave. Autosaves are only performed if nothing has been typed in stdin before the autosave is performed. |
-| TERRARIA\_SERVER\_EXECUTABLE | TerrariaServer.bin.x86_64 | The server executable to run.                                                                                            |
+| SERVER\_EXECUTABLE | ./TerrariaServer.bin.x86_64 | The server executable to run.                                                                                            |
