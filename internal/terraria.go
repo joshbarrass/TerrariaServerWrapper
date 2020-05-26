@@ -68,6 +68,7 @@ func (server *Server) Shutdown() error {
 	// tell the server to save and exit
 	server.Stdin.Write([]byte(autosaveCommand))
 	server.Stdin.Write([]byte(exitCommand))
+	server.Command.Wait()
 
 	server.quit <- struct{}{}
 	return nil
