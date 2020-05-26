@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const autosaveCommand = "save\r"
+const autosaveCommand = "save\n\r"
 
 // startInputLoop begins a goroutine that continuously forwards
 // os.stdin to the server's stdin pipe

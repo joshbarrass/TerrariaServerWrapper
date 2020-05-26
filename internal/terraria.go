@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const exitCommand = "exit\r"
+const exitCommand = "exit\n\r"
 
 // Server type holds all the os/exec objects for the terraria server
 type Server struct {
@@ -53,22 +53,23 @@ func (server *Server) Start() error {
 	}
 
 	fmt.Println("Server starting...")
-	server.ShutdownOnExit()
+	// server.ShutdownOnExit()
 	server.startInputLoop(ctx)
 	server.startAutosaveLoop(ctx)
 	server.startSigtermHandler(ctx)
 
 	// wait for exit
 	<-server.quit
+	// cancel()
+	server.Command.Wait()
 
 	return nil
 }
 
 func (server *Server) Shutdown() error {
 	// tell the server to save and exit
-	server.Stdin.Write([]byte(autosaveCommand))
+	// server.Stdin.Write([]byte(autosaveCommand))
 	server.Stdin.Write([]byte(exitCommand))
-	server.Command.Wait()
 
 	server.quit <- struct{}{}
 	return nil
