@@ -17,6 +17,17 @@ executable, and can effectively be called as though it were the server
 executable. The server can still be controlled via the command line
 UI; all stdin to the wrapper is passed through to the server.
 
+## Compiling ##
+
+Compiling this program should be a one-line solution. Simply `cd` to
+the source directory and execute:
+
+```
+go build -o TerrariaServerWrapper cmd/wrapper.go
+```
+
+This will compile the wrapper to `TerrariaServerWrapper` for use in your server.
+
 ## Configuration ##
 
 All configuration is done via environment variables.
