@@ -32,7 +32,8 @@ This will compile the wrapper to `TerrariaServerWrapper` for use in your server.
 
 All configuration is done via environment variables.
 
-| Env Variable                 | Default                   | Description                                                                                                              |
-|:----------------------------:|:-------------------------:|--------------------------------------------------------------------------------------------------------------------------|
-| AUTOSAVE\_TIME               | 5m                        | How often to autosave. Autosaves are only performed if nothing has been typed in stdin before the autosave is performed. |
-| SERVER\_EXECUTABLE | ./TerrariaServer.bin.x86_64 | The server executable to run.                                                                                            |
+| Env Variable                 | Default                     | Description                                                                                                              |
+|:----------------------------:|:---------------------------:|--------------------------------------------------------------------------------------------------------------------------|
+| AUTOSAVE\_TIME               | 5m                          | How often to autosave. Autosaves are only performed if nothing has been typed in stdin before the autosave is performed. |
+| SERVER\_EXECUTABLE           | ./TerrariaServer.bin.x86_64 | The server executable to run.                                                                                            |
+| INTERACTIVE                  | true                        | If false, disables the stdin loop. This fixes a CPU spike when run in a non-tty docker container.                        |

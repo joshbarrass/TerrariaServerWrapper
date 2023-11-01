@@ -13,6 +13,7 @@ import (
 type Configuration struct {
 	AutosaveTime string `envconfig:"AUTOSAVE_TIME" default:"5m"`
 	Executable   string `envconfig:"SERVER_EXECUTABLE" default:"./TerrariaServer.bin.x86_64"`
+	Interactive  bool   `envconfig:"INTERACTIVE" default:"true"`
 }
 
 func main() {
@@ -28,7 +29,7 @@ func main() {
 	}
 
 	command := append([]string{config.Executable}, os.Args[1:]...)
-	server, err := internal.NewServer(command, autosaveTime)
+	server, err := internal.NewServer(command, autosaveTime, config.Interactive)
 	if err != nil {
 		logrus.Fatalf("An error occured starting the server: %s", err)
 	}

@@ -18,10 +18,11 @@ type Server struct {
 	AutosaveTime time.Duration
 	quit         chan struct{}
 	lastWrite    time.Time
+	interactive  bool
 }
 
 // NewServer launches a new Terraria server with a given command
-func NewServer(command []string, autosaveTime time.Duration) (*Server, error) {
+func NewServer(command []string, autosaveTime time.Duration, interactive bool) (*Server, error) {
 	cmd := exec.Command(command[0], command[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -39,6 +40,7 @@ func NewServer(command []string, autosaveTime time.Duration) (*Server, error) {
 		AutosaveTime: autosaveTime,
 		quit:         quit,
 		lastWrite:    time.Now(),
+		interactive:  interactive,
 	}, nil
 }
 
@@ -54,7 +56,9 @@ func (server *Server) Start() error {
 
 	fmt.Println("Server starting...")
 	// server.ShutdownOnExit()
-	server.startInputLoop(ctx)
+	if server.interactive {
+		server.startInputLoop(ctx)
+	}
 	server.startAutosaveLoop(ctx)
 	server.startSigtermHandler(ctx)
 

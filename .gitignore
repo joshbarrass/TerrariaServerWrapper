@@ -80,3 +80,5 @@ flycheck_*.el
 /Godeps/
 
 # End of https://www.gitignore.io/api/go
+TerrariaServerWrapper
+Dockerfile
