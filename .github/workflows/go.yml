@@ -21,8 +21,11 @@ jobs:
       with:
         go-version: '1.20'
 
-    - name: Build
+    - name: Build Linux
       run: go build -v -o ./TerrariaServerWrapper-x64 ./cmd/wrapper.go
+
+    - name: Build Windows
+      run: GOOS=windows GOARCH=amd64 go build -v -o ./TerrariaServerWrapper-x64.exe ./cmd/wrapper.go
 
 # Fix this later
 #    - name: Test
@@ -31,5 +34,7 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v0.1.14
       with:
-        files: "${{github.workspace}}/TerrariaServerWrapper"
+        files: |
+          "${{github.workspace}}/TerrariaServerWrapper-x64"
+          "${{github.workspace}}/TerrariaServerWrapper-x64.exe"
         fail_on_unmatched_files: true
