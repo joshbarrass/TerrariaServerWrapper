@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/signal"
 	"syscall"
@@ -23,7 +24,11 @@ func (server *Server) startInputLoop(ctx context.Context) {
 				return
 			default:
 				buf := make([]byte, 1024)
-				n, _ := os.Stdin.Read(buf)
+				n, err := os.Stdin.Read(buf)
+				if err == io.EOF {
+					fmt.Println("Exiting read loop -- EOF")
+					return
+				}
 				if n == 0 {
 					continue
 				}
