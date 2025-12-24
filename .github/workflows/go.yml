@@ -9,9 +9,11 @@ on:
       - 'v*'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: ['linux','windows']
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -21,20 +23,45 @@ jobs:
       with:
         go-version: '1.20'
 
-    - name: Build Linux
-      run: go build -v -o "${{github.workspace}}/TerrariaServerWrapper-x64" "${{github.workspace}}/cmd/wrapper.go"
+    - name: Set binary name
+      run: |
+        if [ "${{ matrix.goos }}" = "windows" ]; then
+          echo "binname=TerrariaServerWrapper-${{matrix.goos}}-x64.exe" >> $GITHUB_ENV
+        else
+          echo "binname=TerrariaServerWrapper-${{matrix.goos}}-x64" >> $GITHUB_ENV
+        fi
 
-    - name: Build Windows
-      run: GOOS=windows GOARCH=amd64 go build -v -o "${{github.workspace}}/TerrariaServerWrapper-x64.exe" "${{github.workspace}}/cmd/wrapper.go"
+    - name: Build
+      run: go build -v -o "${{github.workspace}}/${{env.binname}}" "${{github.workspace}}/cmd/wrapper.go"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.binname }}
+        path: "${{github.workspace}}/${{env.binname}}"
 
 # Fix this later
 #    - name: Test
 #      run: go test -v ./...
 
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: build-artifacts
+        pattern: TerrariaServerWrapper-*
+        merge-multiple: true
+
     - name: Create Release
       uses: softprops/action-gh-release@v0.1.14
       with:
         files: |
-          ${{github.workspace}}/TerrariaServerWrapper-x64
-          ${{github.workspace}}/TerrariaServerWrapper-x64.exe
+          build-artifacts/TerrariaServerWrapper-linux-x64
+          build-artifacts/TerrariaServerWrapper-windows-x64.exe
         fail_on_unmatched_files: true
